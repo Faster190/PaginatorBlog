@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <link rel = "stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<body>
+<div class="row">
+  {% for post in page_obj %}
+    <div class="col-md-4">
+      <h2>{{ post.title }}</h2>
+      <p>{{ post.content }}</p>
+      <p>{{ post.created_at }}</p>
+    </div>
+  {% endfor %}
+</div>
+
+    {% if page_obj.has_other_pages %}
+  <nav aria-label="Page navigation">
+      {% if page_obj.has_previous %}
+          <a class="page-link" href="?page={{ page_obj.previous_page_number }}&amount_of_posts={{ amount_of_posts }}" aria-label="Previous page">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+      {% else %}
+          <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+          </a>
+      {% endif %}
+
+      {% for i in page_obj.paginator.page_range %}
+        {% if page_obj.number == i %}
+            <a class="page-link" href='#'><strong>{{ i }}</strong></a>
+        {% else %}
+            <a class="page-link" href="?page={{ i }}&amount_of_posts={{ amount_of_posts }}">{{ i }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+          <a class="page-link" href="?page={{ page_obj.next_page_number }}&amount_of_posts={{ amount_of_posts }}" aria-label="Next page">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+      {% else %}
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+      {% endif %}
+  </nav>
+    {% endif %}
+
+<p>
+    <div class="dropdown">
+        <button>Количество постов на странице: {{ amount_of_posts }}</button>
+            <div class="dropdown-options">
+                {% for i in range %}
+                    {% if amount_of_posts == i %}
+                        <a href="#">{{ i }}</a>
+                    {% else %}
+                        <a href="?amount_of_posts={{ i }}">{{ i }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+    </div>
+</p>
+</body>
+</html>
